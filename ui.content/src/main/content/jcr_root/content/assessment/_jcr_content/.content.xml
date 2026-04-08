@@ -5,5 +5,5 @@
           jcr:primaryType="cq:PageContent"
           jcr:title="Assessment"
           cq:conf="/conf/assessment"
-          sling:resourceType="core/wcm/components/page/v3/page"/>
+          sling:resourceType="core/wcm/components/page/v2/page"/>
 
