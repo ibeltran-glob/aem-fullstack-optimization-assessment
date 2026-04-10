@@ -7,6 +7,8 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.assessment.core.services.WeatherService;
 import com.day.cq.wcm.api.Page;
@@ -21,6 +23,9 @@ public class WeatherModel {
     private static final String DESCRIPTION = "description";
 
     private static final String TEMPERATURE = "temperature";
+
+    private static final Logger LOG = LoggerFactory.getLogger(WeatherModel.class);
+
 
     @Inject
     private String city;
@@ -38,11 +43,15 @@ public class WeatherModel {
     
     
     @PostConstruct
-    protected void init() throws Exception {
-        weatherJson = weatherService.getForecast(getCity());
-        JsonObject jsonObject = JsonParser.parseString(weatherJson).getAsJsonObject();
-        cityTemperature = (jsonObject.has(TEMPERATURE)) ? jsonObject.get(TEMPERATURE).getAsString() : "";
-        cityDescription = (jsonObject.has(DESCRIPTION)) ? jsonObject.get(DESCRIPTION).getAsString() : "";
+    protected void init() {
+        try {
+            weatherJson = weatherService.getForecast(getCity());
+            JsonObject jsonObject = JsonParser.parseString(weatherJson).getAsJsonObject();
+            cityTemperature = (jsonObject.has(TEMPERATURE)) ? jsonObject.get(TEMPERATURE).getAsString() : "";
+            cityDescription = (jsonObject.has(DESCRIPTION)) ? jsonObject.get(DESCRIPTION).getAsString() : "";
+        } catch (Exception e) {
+            LOG.error("Error on Weather model", e);
+        }
     }
 
     public String getCity() {
