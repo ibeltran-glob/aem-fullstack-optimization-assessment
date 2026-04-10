@@ -1,7 +1,7 @@
-/filters {
-    /0001 { /type "allow" /method "GET" /url "/content/*" }
-    /0010 { /type "allow" /url "/etc.clientlibs/*" }
-    /0020 { /type "allow" /url "/bin/*" }
-    /0030 { /type "allow" /url "/libs/granite/csrf/token.json" }
-}
+/0001 { /type "deny"  /url "*" }
+/0002 { /type "deny" /url "/content*" /suffix "*" }
+/0003 { /type "deny" /url "/content*" /selectors "*" }
+/0004 { /type "allow" /method "GET" /url "/content/*" }
+/0010 { /type "allow" /url "/etc.clientlibs/*" }
+/0030 { /type "allow" /url "/libs/granite/csrf/token.json" }
 

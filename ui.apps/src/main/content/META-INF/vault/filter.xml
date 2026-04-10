@@ -3,4 +3,6 @@
     <filter root="/apps/assessment/components"/>
     <filter root="/apps/assessment/clientlibs"/>
     <filter root="/apps/assessment/install"/>
+    <filter root="/apps/assessment/config"/>
+
 </workspaceFilter>

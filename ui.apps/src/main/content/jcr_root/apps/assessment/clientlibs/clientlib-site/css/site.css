@@ -4,8 +4,11 @@
     background: #fafafa;
 }
 
-.cmp-weather__server,
-.cmp-weather__client {
+.cmp-weather .cmp-weather__server,
+.cmp-weather .cmp-weather__client {
     margin-top: 12px;
 }
 
+.cmp-weather .cmp-weather__error {
+    color: red;
+}

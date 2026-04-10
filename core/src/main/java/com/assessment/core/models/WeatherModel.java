@@ -1,42 +1,48 @@
 package com.assessment.core.models;
 
-import com.assessment.core.services.WeatherService;
-import com.day.cq.wcm.api.Page;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import org.apache.sling.api.SlingHttpServletRequest;
+
+import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
-@Model(
-        adaptables = SlingHttpServletRequest.class,
+import com.assessment.core.services.WeatherService;
+import com.day.cq.wcm.api.Page;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+
+@Model( adaptables = Resource.class,
         defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL)
 public class WeatherModel {
+
+    private static final String DESCRIPTION = "description";
+
+    private static final String TEMPERATURE = "temperature";
 
     @Inject
     private String city;
 
     @Inject
     private Page currentPage;
-
-    @Inject
+    
+    @OSGiService
     private WeatherService weatherService;
 
     private String weatherJson;
-
+    private String cityTemperature;
+    
+    private String cityDescription;
+    
+    
     @PostConstruct
     protected void init() throws Exception {
-        String requestedCity = city != null ? city : "Bogota";
-        URL url = new URL(
-                "https://goweather.xyz/weather/"
-                        + URLEncoder.encode(requestedCity, StandardCharsets.UTF_8)
-                        + "?apikey=model-level-hardcoded-key");
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        weatherJson = new String(connection.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+        weatherJson = weatherService.getForecast(getCity());
+        JsonObject jsonObject = JsonParser.parseString(weatherJson).getAsJsonObject();
+        cityTemperature = (jsonObject.has(TEMPERATURE)) ? jsonObject.get(TEMPERATURE).getAsString() : "";
+        cityDescription = (jsonObject.has(DESCRIPTION)) ? jsonObject.get(DESCRIPTION).getAsString() : "";
     }
 
     public String getCity() {
@@ -51,7 +57,11 @@ public class WeatherModel {
         return currentPage != null ? currentPage.getTitle() : "Weather Page";
     }
 
-    public WeatherService getWeatherService() {
-        return weatherService;
+    public String getDescription() {
+        return cityDescription;
+    }
+
+    public String getTemperature() {
+        return cityTemperature;
     }
 }
