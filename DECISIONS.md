@@ -1,9 +1,3 @@
-en weather parece que el modelo no es necesario, se ha sustituido por objetos globales de HTL
-
-
-
----------------------------- END NOTES AREA -------------------------------------------
-
 Here I will explain all modifications I have made.
 
 All the API Calls were placed at WeatherServiceImpl.java. This allows to create a configuration file and remove all api keys references from the rest of the project.
